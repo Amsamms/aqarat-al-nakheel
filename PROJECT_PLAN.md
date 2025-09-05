@@ -293,8 +293,167 @@ property_images (id, property_id, image_url, alt_text)
 - **Status**: Ready for Vercel deployment
 
 ### **Current Status**: Homepage Complete, Tested & Ready for Deployment ✅
-### **Next Phase**: Vercel Deployment & Property Listing Pages
 
 ---
 
-*Last Updated: Day 1 - Project Setup, Core Components, Testing & Deployment Prep Complete*
+## 🚀 **PHASE 2 - DEVELOPMENT ROADMAP**
+
+### **Core Development Requirements**
+- ✅ **Database-First Approach**: ALL content must come from Supabase (no hardcoded data)
+- ✅ **Vercel Compatibility**: Every feature must work seamlessly on Vercel deployment  
+- ✅ **Arabic RTL Focus**: Continue Arabic-first development with proper RTL layout
+- ✅ **Performance Optimized**: Fast loading, efficient queries, cached data
+
+### **Phase 2A - Immediate Priority (Next Session)**
+
+#### **1. Property Detail Pages (`/properties/[id]`)**
+- **Database Integration**: Dynamic pages from `properties` table in Supabase
+- **Image Galleries**: Lightbox with images from `property_images` table
+- **Property Specs**: Area, bedrooms, bathrooms, amenities from database
+- **Contact Forms**: Save inquiries to `contact_forms` table with property reference
+- **Vercel Compatibility**: Static generation with ISR for performance
+- **Arabic Layout**: Proper RTL layout for property descriptions
+
+#### **2. Enhanced Property Listings (`/properties`)**
+- **Dynamic Filtering**: Filter by type, location, price from Supabase data
+- **Search Functionality**: Real-time search across property titles and descriptions
+- **Pagination**: Efficient pagination for large property datasets
+- **Sorting Options**: Price, date added, area, ratings
+- **Database Queries**: Optimized Supabase queries with proper indexing
+
+#### **3. User Authentication System**
+- **Supabase Auth**: Login, registration, password reset
+- **User Profiles**: Store in `user_profiles` table with Arabic support
+- **Favorites System**: Save/unsave properties with database persistence
+- **User Dashboard**: View saved properties, inquiry history
+- **Vercel Sessions**: Proper session handling on Vercel edge functions
+
+### **Phase 2B - Secondary Priority**
+
+#### **4. Moderator Dashboard (`/admin`)**
+- **Property Management**: CRUD operations for properties via Supabase
+- **Image Upload**: Bulk upload to Supabase Storage with optimization
+- **Content Moderation**: Approve/reject user-generated content
+- **Analytics Dashboard**: Property views, inquiries, user statistics
+- **Role-Based Access**: Admin/moderator permissions via RLS policies
+
+#### **5. Google Analytics 4 Integration**
+- **GA4 Setup**: Complete Google Analytics 4 integration
+- **Event Tracking**: Property views, searches, contact form submissions
+- **Conversion Tracking**: Lead generation, phone calls, email clicks
+- **Performance Monitoring**: Page load times, user engagement metrics
+- **Arabic Content Tracking**: Proper tracking for RTL Arabic content
+
+#### **6. SEO & Performance Optimization**
+- **Meta Tags**: Dynamic meta tags for each property from database
+- **Structured Data**: Schema.org markup for real estate listings
+- **XML Sitemap**: Auto-generated sitemap from Supabase property data
+- **Open Graph**: Social media sharing optimization
+- **Core Web Vitals**: Optimize for Google's performance metrics
+
+#### **7. Additional Pages (Database-Driven)**
+- **About Us Page**: Content from Supabase CMS table
+- **Contact Page**: Google Maps integration, contact info from database
+- **Blog System**: Articles stored in Supabase with Arabic support
+- **Legal Pages**: Terms, Privacy Policy from database content
+
+### **Database Schema Extensions Needed**
+
+```sql
+-- User favorites system
+CREATE TABLE user_favorites (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES user_profiles(id),
+  property_id UUID REFERENCES properties(id),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id, property_id)
+);
+
+-- Property inquiries
+CREATE TABLE property_inquiries (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  property_id UUID REFERENCES properties(id),
+  user_id UUID REFERENCES user_profiles(id),
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT,
+  message TEXT NOT NULL,
+  status TEXT DEFAULT 'new',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- CMS content for pages
+CREATE TABLE page_content (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  page_slug TEXT UNIQUE NOT NULL,
+  title_ar TEXT NOT NULL,
+  content_ar TEXT NOT NULL,
+  meta_description_ar TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Blog posts
+CREATE TABLE blog_posts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title_ar TEXT NOT NULL,
+  slug TEXT UNIQUE NOT NULL,
+  content_ar TEXT NOT NULL,
+  excerpt_ar TEXT,
+  featured_image TEXT,
+  published BOOLEAN DEFAULT FALSE,
+  created_by UUID REFERENCES user_profiles(id),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+### **Technical Implementation Guidelines**
+
+#### **Supabase Integration Patterns**
+- Use Server Components for initial data loading
+- Implement real-time subscriptions for live updates
+- Optimize queries with proper joins and indexing
+- Use Row Level Security for all data protection
+- Implement efficient caching strategies
+
+#### **Vercel Deployment Considerations**
+- Use Static Site Generation (SSG) where possible
+- Implement Incremental Static Regeneration (ISR)
+- Optimize Edge Functions for authentication
+- Configure proper environment variables
+- Set up automatic deployments from GitHub
+
+#### **Performance Optimization**
+- Implement image optimization with Next.js Image
+- Use lazy loading for property listings
+- Add loading states and skeleton components
+- Optimize Arabic font loading
+- Implement proper error boundaries
+
+### **Google Analytics Implementation Plan**
+```javascript
+// GA4 Events to Track:
+- property_view: When user views property details
+- property_search: When user searches properties  
+- contact_form_submit: When user submits inquiry
+- phone_click: When user clicks phone number
+- email_click: When user clicks email
+- property_favorite: When user saves property
+- user_registration: When new user registers
+```
+
+### **Next Session Command**
+When you're ready to start Phase 2, simply say **"proceed"** and I will:
+1. Start with Property Detail Pages implementation
+2. Create the database schema extensions
+3. Implement dynamic routing and data fetching
+4. Test everything locally with Playwright
+5. Deploy updates to Vercel
+
+---
+
+### **Current Status**: Homepage Complete, Phase 2 Roadmap Ready ✅
+### **Next Phase**: Property Management System Implementation
+
+*Last Updated: Day 1 - Project Complete, Phase 2 Roadmap Documented*
