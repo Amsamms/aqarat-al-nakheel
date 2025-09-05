@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Search, MapPin, Home, Star } from 'lucide-react'
-import Image from 'next/image'
+import { Search, MapPin, Home } from 'lucide-react'
 
 const HeroSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0)

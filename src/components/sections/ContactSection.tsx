@@ -78,7 +78,7 @@ const ContactSection = () => {
         phone: '',
         message: ''
       })
-    } catch (error) {
+    } catch {
       toast.error('حدث خطأ في إرسال الرسالة، يرجى المحاولة مرة أخرى', {
         style: { direction: 'rtl' }
       })
