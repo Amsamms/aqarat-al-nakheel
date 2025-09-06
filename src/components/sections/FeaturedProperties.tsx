@@ -178,7 +178,7 @@ const FeaturedProperties = () => {
               {/* Property Image */}
               <div className="relative overflow-hidden">
                 <Image
-                  src={property.images[0]}
+                  src={property.images?.[0]}
                   alt={property.title_ar}
                   width={400}
                   height={250}
